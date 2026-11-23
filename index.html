@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartStock -- Gestão de Estoque
+    </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <section id="login-screen" class="login-screen">
+        <form id="login-form" class="login-card">
+            <h1>Smart<span>Stock</span></h1>
+            <p class="welcome">BEM-VINDO!</p>
+
+            <label for="email">E-MAIL</label>
+            <input id="email" type="email" placeholder="meu@email.com" required>
+
+            <label for="password">SENHA</label>
+            <input id="password" type="password" placeholder="Digite a sua senha" required>
+
+            <button class="primary full" type="submit">ENTRAR</button>
+            <p id="login-error" class="error"></p>
+        </form>
+    </section>
+
+    <!-- SISTEMA -->
+    <div id="app" class="app hidden">
+
+        <header class="topbar">
+            <div class="brand">Smart<span>Stock</span></div>
+            <button id="account-button" class="account">● Conta</button>
+        </header>
+
+        <aside class="sidebar">
+            <nav>
+                <button class="nav-link active" data-page="home">Início</button>
+                <button class="nav-link" data-page="products">Produtos</button>
+                <button class="nav-link" data-page="stock">Estoque</button>
+                <button class="nav-link" data-page="dashboard">Dashboard</button>
+                <button class="nav-link" data-page="reports">Relatórios</button>
+                <button class="nav-link" data-page="alerts">Alertas</button>
+            </nav>
+
+            <button id="logout" class="logout">Sair</button>
+        </aside>
+
+        <main class="main-content">
+
+            <!-- INÍCIO -->
+            <section id="page-home" class="page">
+                <h2>Olá <span id="user-name">usuário</span>!</h2>
+
+                <div class="home-layout">
+                    <div class="home-shortcuts">
+                        <button data-go="products">Produtos</button>
+                        <button data-go="stock">Estoque</button>
+                        <button data-go="dashboard">Dashboard</button>
+                        <button data-go="reports">Relatórios</button>
+                        <button data-go="alerts">Alertas</button>
+                    </div>
+
+                    <div class="panel home-chart">
+                        <h3>Produtos mais vendidos</h3>
+                        <div id="best-sellers" class="bar-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRODUTOS -->
+            <section id="page-products" class="page hidden">
+                <div class="toolbar">
+                    <input id="product-search" type="search" placeholder="⌕ Pesquisar produto...">
+                    <button id="add-product" class="primary">
+                        Cadastrar novo produto ＋
+                    </button>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Código</th>
+                                <th>Categoria</th>
+                                <th>Estoque</th>
+                                <th>Atualizar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ESTOQUE -->
+            <section id="page-stock" class="page hidden">
+                <h2>Movimentação de estoque</h2>
+
+                <form id="movement-form" class="movement-form panel">
+
+                    <div>
+                        <label>Tipo</label>
+                        <select id="movement-type">
+                            <option value="Entrada">Entrada</option>
+                            <option value="Saída">Saída</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Produto</label>
+                        <select id="movement-product" required></select>
+                    </div>
+
+                    <div>
+                        <label>Quantidade</label>
+                        <input id="movement-quantity" type="number" min="1" required>
+                    </div>
+
+                    <div>
+                        <label>Responsável</label>
+                        <input id="movement-person" placeholder="Nome" required>
+                    </div>
+
+                    <button class="primary" type="submit">Registrar</button>
+                </form>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Responsável</th>
+                            </tr>
+                        </thead>
+                        <tbody id="movements-table"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- DASHBOARD -->
+            <section id="page-dashboard" class="page hidden">
+                <h2>Dashboard</h2>
+
+                <div id="dashboard-stats" class="stats"></div>
+
+                <div class="charts-grid">
+                    <div class="panel">
+                        <h3>Movimentações recentes</h3>
+                        <canvas id="movement-chart" width="650" height="300"></canvas>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Entradas x Saídas</h3>
+                        <div id="movement-summary" class="summary-chart"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RELATÓRIOS -->
+            <section id="page-reports" class="page hidden">
+                <h2>Relatórios</h2>
+
+                <div id="report-stats" class="stats"></div>
+
+                <div class="charts-grid">
+                    <div class="panel">
+                        <h3>Estoque por produto</h3>
+                        <div id="stock-report" class="bar-list"></div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Movimentações</h3>
+                        <div id="report-summary"></div>
+                    </div>
+                </div>
+
+                <button id="export-report" class="primary export-button">
+                    Baixar relatório CSV
+                </button>
+            </section>
+
+            <!-- ALERTAS -->
+            <section id="page-alerts" class="page hidden">
+                <h2>Alertas</h2>
+
+                <div class="alerts-grid">
+                    <div class="alert-panel">
+                        <h3>🔔 Alertas ativos</h3>
+                        <div id="active-alerts"></div>
+                    </div>
+
+                    <div class="alert-panel">
+                        <h3>✓ Alertas resolvidos</h3>
+                        <div id="resolved-alerts"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- CADASTRO DE PRODUTOS -->
+    <dialog id="product-dialog">
+        <form id="product-form" method="dialog">
+            <h2 id="dialog-title">Cadastrar produto</h2>
+
+            <input id="edit-id" type="hidden">
+
+            <label for="product-name">Nome do produto</label>
+            <input id="product-name" required>
+
+            <label for="product-code">Código</label>
+            <input id="product-code" required>
+
+            <label for="product-category">Categoria</label>
+            <input id="product-category" required>
+
+            <label for="product-quantity">Quantidade inicial</label>
+            <input id="product-quantity" type="number" min="0" value="0" required>
+
+            <label for="product-minimum">Estoque mínimo</label>
+            <input id="product-minimum" type="number" min="0" value="5" required>
+
+            <div class="dialog-actions">
+                <button type="button" id="cancel-dialog" class="secondary">
+                    Cancelar
+                </button>
+
+                <button type="submit" class="primary">Salvar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="script.js"></script>
+</body>
+</html>
